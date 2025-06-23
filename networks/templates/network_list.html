@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Redes{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h2>Hola {{ request.user.username }}, esta es tu lista de redes</h2>
+</div>
+
+<div class="d-grid gap-2 mb-4">
+    <form action="{% url 'create_network' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Crear nueva red</button>
+    </form>
+</div>
+
+<div class="d-grid gap-2 mb-4">
+    <form action="{% url 'check_networks' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Recursos desplegados</button>
+    </form>
+    <span>Estos son los recursos actualmente desplegados en OpenStack para tu usuario.</span>
+    <p>Este proceso puede tardar unos minutos...</p>
+</div>
+
+{% if error_red_5G_open %}
+<div class="alert alert-warning">
+    ⚠️ Hubo un problema con tu red Open5GCore. Elimínela para solucionarlo.
+</div>
+<div class="d-grid gap-2 mb-3">
+    <form action="{% url 'delete_net_5G' 'open' 'False' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar red Open5GCore</button>
+    </form>
+</div>
+{% elif creada_red_5G_open %}
+<div class="alert alert-success">
+    ✅ Red 5G Open desplegada
+</div>
+<div class="d-grid gap-2 mb-3">
+    <form action="{% url 'delete_net_5G' 'open' 'False' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar red Open5GCore</button>
+    </form>
+    <form action="{% url 'view_net_5G' 'open' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Ver red Open5GCore</button>
+    </form>
+</div>
+{% else %}
+<div class="alert alert-danger">
+    ❌ No se ha creado tu red Open5GCore
+</div>
+{% endif %}
+
+{% if error_red_5G_free %}
+<div class="alert alert-warning">
+    ⚠️ Hubo un problema con tu red Free5GC. Elimínela para solucionarlo.
+</div>
+<div class="d-grid gap-2 mb-3">
+    <form action="{% url 'delete_net_5G' 'free' 'False' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar red Free5GC</button>
+    </form>
+</div>
+{% elif creada_red_5G_free %}
+<div class="alert alert-success">
+    ✅ Red 5G Free desplegada
+</div>
+<div class="d-grid gap-2 mb-3">
+    <form action="{% url 'delete_net_5G' 'free' 'False' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar red Free5GC</button>
+    </form>
+    <form action="{% url 'view_net_5G' 'free' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Ver red Free5GC</button>
+    </form>
+</div>
+{% else %}
+<div class="alert alert-danger">
+    ❌ No se ha creado tu red Free5GC
+</div>
+{% endif %}
+
+{% if error_red_gen %}
+<div class="alert alert-warning">
+    ⚠️ Hubo un problema con tu red Ampliada de Pruebas. Elimínela para solucionarlo.
+</div>
+<div class="d-grid gap-2 mb-3">
+    <form action="{% url 'delete_net_gen' 'False' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar red Ampliada de Pruebas</button>
+    </form>
+</div>
+{% elif creada_red_gen %}
+<div class="alert alert-success">
+    ✅ Red Ampliada de Pruebas desplegada
+</div>
+<div class="d-grid gap-2 mb-3">
+    <form action="{% url 'delete_net_gen' 'False' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar red Ampliada de Pruebas</button>
+    </form>
+    <form action="{% url 'view_net_gen' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Ver red Ampliada de Pruebas</button>
+    </form>
+</div>
+{% else %}
+<div class="alert alert-danger">
+    ❌ No se ha creado tu red Ampliada de Pruebas
+</div>
+{% endif %}
+
+
+<hr class="my-4">
+
+<div class="d-grid gap-2">
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary">Cerrar sesión</button>
+    </form>
+    <form action="{% url 'delete_user' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar usuario</button>
+    </form>
+</div>
+
+{# Sistema de mensajes de Django #}
+
+{% if messages %}
+{% for message in messages %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    alert("{{ message|escapejs }}");
+});
+</script>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

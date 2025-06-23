@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Recursos Disponibles en OpenStack{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Recursos disponibles desplegados en OpenStack</h1>
+
+    {% if messages %}
+        <div class="list-group mb-4">
+            {% for msg in messages %}
+                {% if '✅' in msg %}
+                    <div class="list-group-item list-group-item-success">
+                        {{ msg }}
+                    </div>
+                {% else %}
+                    <div class="list-group-item list-group-item-danger">
+                        {{ msg }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">No se detectaron recursos disponibles.</div>
+    {% endif %}
+
+    <a href="{% url 'network_list' %}" class="btn btn-primary btn-lg">Volver a la lista de redes</a>
+</div>
+{% endblock %}
